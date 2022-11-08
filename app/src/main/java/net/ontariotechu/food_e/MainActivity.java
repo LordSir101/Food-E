@@ -1,6 +1,7 @@
 package net.ontariotechu.food_e;
 
 import androidx.appcompat.app.AppCompatActivity;
+//import net.ontariotechu.food_e.app.BuildConfig;
 
 import android.os.Bundle;
 
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
                 URLConnection connection = null;
                 try {
                     //TODO hide app key and app id
-                    connection = new URL("https://api.edamam.com/api/recipes/v2?type=public&app_id=appId&app_key=appKey&mealType=Dinner").openConnection();
+                    connection = new URL(String.format("https://api.edamam.com/api/recipes/v2?type=public&app_id=%s&app_key=%s&mealType=Dinner", BuildConfig.APP_ID, BuildConfig.API_KEY)).openConnection();
                     connection.setRequestProperty("Accept", "application/json");
                 } catch (IOException e) {
                     e.printStackTrace();
