@@ -9,4 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#DDDDDD</color>
     <color name="yellow">#FFC800</color>
+    <color name="primary">#000000</color>
+    <color name="secondary">#202020</color>
+    <color name="accent">#028808</color>
+    <color name="accent_2">#1EB524</color>
 </resources>

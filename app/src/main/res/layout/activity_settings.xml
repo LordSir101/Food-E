@@ -9,6 +9,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
         android:theme="@style/Theme.FoodE.AppBarOverlay">
 
         <RelativeLayout
@@ -33,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:padding="@dimen/appbar_padding"
-                android:text="@string/app_name"
+                android:text="Settings"
                 android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
 
         </RelativeLayout>
