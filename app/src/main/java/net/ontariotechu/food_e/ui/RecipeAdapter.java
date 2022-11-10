@@ -1,6 +1,7 @@
 package net.ontariotechu.food_e.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,21 +32,38 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         View recipeView = view;
         if (recipeView == null)
             recipeView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_recipe, parent, false);
+
         Recipe currentRecipe = recipes.get(pos);
-        TextView ttl = recipeView.findViewById(R.id.txtTitle);
+
+        // Initialize components
+        TextView txtTitle = recipeView.findViewById(R.id.txtTitle);
         ImageButton btnFavourite = recipeView.findViewById(R.id.btnFavourite);
+
+        // Add listeners and adapters
         btnFavourite.setOnClickListener(v -> {
-            if (currentRecipe.getFavourite()) {
-                currentRecipe.setFavourite(false);
-                Drawable starOutline = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.star_outline, null);
-                btnFavourite.setBackground(starOutline);
-            } else {
-                currentRecipe.setFavourite(true);
-                Drawable starSolid = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.star_solid, null);
-                btnFavourite.setBackground(starSolid);
-            }
+            currentRecipe.setFavourite(!currentRecipe.getFavourite());
+            setFavouriteButton(btnFavourite, currentRecipe.getFavourite());
         });
-        ttl.setText(currentRecipe.getTitle());
+        recipeView.setOnClickListener(this::onItemClicked);
+
+        txtTitle.setText(currentRecipe.getTitle());
         return recipeView;
     }
+
+    // Changes the star from outline to solid or solid to outline
+    private void setFavouriteButton(ImageButton button, boolean isFavourite) {
+        if (!isFavourite) {
+            Drawable starOutline = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.star_outline, null);
+            button.setBackground(starOutline);
+        } else {
+            Drawable starSolid = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.star_solid, null);
+            button.setBackground(starSolid);
+        }
+    }
+
+    private void onItemClicked(View v) {
+        Intent intent = new Intent(getContext(), DetailActivity.class);
+        getContext().startActivity(intent);
+    }
+
 }

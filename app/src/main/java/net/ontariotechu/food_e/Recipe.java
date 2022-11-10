@@ -3,6 +3,7 @@ package net.ontariotechu.food_e;
 import java.util.ArrayList;
 import java.util.List;
 
+// Temporary model for testing purposes
 public class Recipe {
 
     private String title;

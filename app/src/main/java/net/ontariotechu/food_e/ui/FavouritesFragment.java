@@ -4,12 +4,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
 import net.ontariotechu.food_e.R;
+import net.ontariotechu.food_e.Recipe;
+
+import java.util.List;
 
 public class FavouritesFragment extends Fragment {
+
+    private ListView lsRecipes;
 
     public static FavouritesFragment newInstance() {
         FavouritesFragment fragment = new FavouritesFragment();
@@ -23,9 +29,12 @@ public class FavouritesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_favourites, container, false);
 
         // Initialize components
+        lsRecipes = view.findViewById(R.id.lsRecipes);
 
         // Set Listeners and adapters
-
+        List<Recipe> recipes = Recipe.testRecipes();
+        RecipeAdapter recipeAdapter = new RecipeAdapter(getContext(), recipes);
+        lsRecipes.setAdapter(recipeAdapter);
 
         return view;
     }
