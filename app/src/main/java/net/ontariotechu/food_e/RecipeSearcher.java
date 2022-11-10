@@ -9,13 +9,15 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.Scanner;
 
 public class RecipeSearcher implements Runnable{
 
-    private ArrayList<String> filters;
+    private Hashtable<String, ArrayList<String>> filters;
     private String baseUrl;
-    public RecipeSearcher(ArrayList data) {
+    public RecipeSearcher(Hashtable<String, ArrayList<String>> data) {
         this.filters = data;
         this.baseUrl = String.format("https://api.edamam.com/api/recipes/v2?type=public&app_id=%s&app_key=%s", BuildConfig.APP_ID, BuildConfig.API_KEY);
     }
@@ -25,12 +27,17 @@ public class RecipeSearcher implements Runnable{
         URLConnection connection = null;
 
         String urlString = baseUrl;
-        for(String filter:this.filters){
-            urlString += String.format("&mealType=%s", filter);
+
+        // Add query params to the url
+        // key of filterData is the filter name
+        // value of filterData is array of values for that filter
+        for (Map.Entry<String, ArrayList<String>> filterData : filters.entrySet()) {
+            for(String filter: filterData.getValue()){
+                urlString += String.format("&%s=%s", filterData.getKey(), filter);
+            }
         }
 
         try {
-            //TODO hide app key and app id
             connection = new URL(urlString).openConnection();
             connection.setRequestProperty("Accept", "application/json");
         } catch (IOException e) {
@@ -41,19 +48,18 @@ public class RecipeSearcher implements Runnable{
             InputStream is = connection.getInputStream();
             Scanner s = new Scanner(is).useDelimiter("\\A");
             String result = s.hasNext() ? s.next() : "";
-            System.out.println(result);
             JSONObject obj = new JSONObject(result);
-            //String next = obj.getJSONObject("_links").getString("next");
+
+            // TODO do something useful with API results
             System.out.println("#######################################################################################");
             System.out.println(urlString);
-            //System.out.println(next);
 
-            JSONArray arr = obj.getJSONArray("hits"); // notice that `"posts": [...]`
+            // example of getting recipe names from result object
+            JSONArray arr = obj.getJSONArray("hits");
             for (int i = 0; i < arr.length(); i++) {
                 String label = arr.getJSONObject(i).getJSONObject("recipe").getString("label");
                 System.out.println(label);
             }
-            //System.out.println(connection.getContent().toString());
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }

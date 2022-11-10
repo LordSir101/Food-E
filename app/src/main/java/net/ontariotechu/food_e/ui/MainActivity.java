@@ -8,7 +8,6 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.chip.Chip;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -16,8 +15,9 @@ import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.RecipeSearcher;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
-public class MainActivity extends AppCompatActivity implements BrowseFragment.OnDataPass {
+public class MainActivity extends AppCompatActivity implements BrowseFragment.DataPasser {
 
     private ViewPager2 viewPager;
     private TabLayout tabs;
@@ -42,9 +42,6 @@ public class MainActivity extends AppCompatActivity implements BrowseFragment.On
         // Add listeners and adapters
         btnSettings.setOnClickListener(this::onSettingsClicked);
 
-//        Thread thread = new Thread(() -> {});
-//        thread.start();
-
     }
 
     public void onSettingsClicked(View v) {
@@ -53,11 +50,8 @@ public class MainActivity extends AppCompatActivity implements BrowseFragment.On
     }
 
     @Override
-    public void onDataPass(ArrayList<String> data) {
-//        for (String filter:data){
-//            System.out.println(filter);
-//            //....
-//        }
+    public void onDataPass(Hashtable<String, ArrayList<String>> data) {
+        // Make the API call from RecipeSearcher
         Runnable recipeSearcher = new RecipeSearcher(data);
         Thread thread = new Thread(recipeSearcher);
         thread.start();

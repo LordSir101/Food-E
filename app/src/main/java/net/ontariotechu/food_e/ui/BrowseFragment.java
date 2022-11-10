@@ -27,6 +27,7 @@ import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,12 +39,14 @@ public class BrowseFragment extends Fragment {
     private ChipGroup cgMeal;
     private ChipGroup cgCuisine;
     private TextInputEditText etSearch;
-    private OnDataPass dataPasser;
+    private DataPasser dataPasser;
 
-    private ArrayList<String> filters;
+    private Hashtable<String, ArrayList<String>> selectedFilters;
 
-    public interface OnDataPass {
-        public void onDataPass(ArrayList<String> data);
+    // Main Activity implements this interface
+    // We can call this function to pass data to Main Activity
+    public interface DataPasser {
+        void onDataPass(Hashtable<String, ArrayList<String>> data);
     }
 
     public static BrowseFragment newInstance() {
@@ -54,12 +57,15 @@ public class BrowseFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        dataPasser = (OnDataPass) context;
+        dataPasser = (DataPasser) context;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        //keep track of current filters
+        selectedFilters = new Hashtable<>();
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_browse, container, false);
@@ -89,21 +95,21 @@ public class BrowseFragment extends Fragment {
     }
 
     private void onMealChipChanged(ChipGroup group, List<Integer> checkedIds) {
-        // TODO: Get the values from checkedIds and pass to backend
-
-        System.out.println("##################################################");
-        filters = new ArrayList<>();
+        selectedFilters.put("mealType", new ArrayList<>());
         for (Integer id:checkedIds){
             Chip chip = group.findViewById(id);
-            filters.add(chip.getText().toString());
-            //System.out.println();
-            //....
+            selectedFilters.get("mealType").add(chip.getText().toString());
         }
-        dataPasser.onDataPass(filters);
+        dataPasser.onDataPass(selectedFilters);
     }
 
     private void onCuisineChipChanged(ChipGroup group, List<Integer> checkedIds) {
-        // TODO: Get the values from checkedIds and pass to backend
+        selectedFilters.put("cuisineType", new ArrayList<>());
+        for (Integer id:checkedIds){
+            Chip chip = group.findViewById(id);
+            selectedFilters.get("cuisineType").add(chip.getText().toString());
+        }
+        dataPasser.onDataPass(selectedFilters);
     }
 
     private boolean onSearch(View v, int actionId, KeyEvent event) {
@@ -113,5 +119,4 @@ public class BrowseFragment extends Fragment {
         }
         return false;
     }
-
 }
