@@ -1,6 +1,7 @@
 package net.ontariotechu.food_e.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
             currentRecipe.setFavourite(!currentRecipe.getFavourite());
             setFavouriteButton(btnFavourite, currentRecipe.getFavourite());
         });
+        recipeView.setOnClickListener(this::onItemClicked);
 
         txtTitle.setText(currentRecipe.getTitle());
         return recipeView;
@@ -57,6 +59,11 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
             Drawable starSolid = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.star_solid, null);
             button.setBackground(starSolid);
         }
+    }
+
+    private void onItemClicked(View v) {
+        Intent intent = new Intent(getContext(), DetailActivity.class);
+        getContext().startActivity(intent);
     }
 
 }
