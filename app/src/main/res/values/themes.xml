@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorSecondary</item>
         <!-- Customize your theme here. -->
+        <item name="checkboxStyle">@style/Widget.FoodE.CheckBox</item>
     </style>
 
     <style name="Theme.FoodE.NoActionBar">
@@ -22,4 +23,13 @@
     <style name="Theme.FoodE.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.FoodE.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Widget.FoodE.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.FoodE.CheckBox</item>
+    </style>
+
+    <style name="ThemeOverlay.FoodE.CheckBox" parent="">
+        <item name="colorSecondary">@color/accent</item>
+        <item name="colorOnSurface">@color/primary</item>
+    </style>
 </resources>
