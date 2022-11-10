@@ -1,5 +1,6 @@
 package net.ontariotechu.food_e.ui;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,6 +26,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +38,13 @@ public class BrowseFragment extends Fragment {
     private ChipGroup cgMeal;
     private ChipGroup cgCuisine;
     private TextInputEditText etSearch;
+    private OnDataPass dataPasser;
+
+    private ArrayList<String> filters;
+
+    public interface OnDataPass {
+        public void onDataPass(ArrayList<String> data);
+    }
 
     public static BrowseFragment newInstance() {
         BrowseFragment fragment = new BrowseFragment();
@@ -43,8 +52,15 @@ public class BrowseFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        dataPasser = (OnDataPass) context;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_browse, container, false);
 
@@ -74,6 +90,16 @@ public class BrowseFragment extends Fragment {
 
     private void onMealChipChanged(ChipGroup group, List<Integer> checkedIds) {
         // TODO: Get the values from checkedIds and pass to backend
+
+        System.out.println("##################################################");
+        filters = new ArrayList<>();
+        for (Integer id:checkedIds){
+            Chip chip = group.findViewById(id);
+            filters.add(chip.getText().toString());
+            //System.out.println();
+            //....
+        }
+        dataPasser.onDataPass(filters);
     }
 
     private void onCuisineChipChanged(ChipGroup group, List<Integer> checkedIds) {

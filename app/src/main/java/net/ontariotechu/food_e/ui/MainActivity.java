@@ -8,16 +8,21 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.chip.Chip;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import net.ontariotechu.food_e.R;
+import net.ontariotechu.food_e.RecipeSearcher;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements BrowseFragment.OnDataPass {
 
     private ViewPager2 viewPager;
     private TabLayout tabs;
     private ImageButton btnSettings;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +42,24 @@ public class MainActivity extends AppCompatActivity {
         // Add listeners and adapters
         btnSettings.setOnClickListener(this::onSettingsClicked);
 
+//        Thread thread = new Thread(() -> {});
+//        thread.start();
+
     }
 
     public void onSettingsClicked(View v) {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onDataPass(ArrayList<String> data) {
+//        for (String filter:data){
+//            System.out.println(filter);
+//            //....
+//        }
+        Runnable recipeSearcher = new RecipeSearcher(data);
+        Thread thread = new Thread(recipeSearcher);
+        thread.start();
     }
 }
