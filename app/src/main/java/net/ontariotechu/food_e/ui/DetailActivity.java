@@ -11,9 +11,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import net.ontariotechu.food_e.ImageService;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
-import net.ontariotechu.food_e.Utils;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -23,10 +23,14 @@ public class DetailActivity extends AppCompatActivity {
     private ImageView ivRecipe;
     private Recipe recipe;
 
+    private ImageService imageService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        imageService = ImageService.getInstance();
 
         // TODO: Get this recipe from service using id passed by intent possibly
         Intent intent = getIntent();
@@ -45,7 +49,14 @@ public class DetailActivity extends AppCompatActivity {
 
         // Setup view
         txtTitle.setText(recipe.getTitle());
-        Utils.loadImage(recipe.getImageUrl(), ivRecipe);
+
+        imageService.getImageBackground(recipe.getImageUrl(), (bm) -> {
+            if (bm != null) {
+                runOnUiThread(() -> {
+                    ivRecipe.setImageBitmap(bm);
+                });
+            }
+        });
 
     }
 

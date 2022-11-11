@@ -3,6 +3,8 @@ package net.ontariotechu.food_e.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,19 +16,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
+import net.ontariotechu.food_e.ImageService;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
-import net.ontariotechu.food_e.Utils;
 
 import java.util.List;
 
 public class RecipeAdapter extends ArrayAdapter<Recipe> {
 
     List<Recipe> recipes;
+    ImageService imageService;
 
     public RecipeAdapter(@NonNull Context context, List<Recipe> recipes) {
         super(context, 0, recipes);
         this.recipes = recipes;
+        this.imageService = ImageService.getInstance();
     }
 
     @Override
@@ -51,7 +55,14 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
 
         // Setup components
         txtTitle.setText(currentRecipe.getTitle());
-        Utils.loadImage(currentRecipe.getImageUrl(), ivRecipe);
+        imageService.getImageBackground(currentRecipe.getImageUrl(), (bm) -> {
+            if (bm != null) {
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    ivRecipe.setImageBitmap(bm);
+                });
+            }
+        });
+
         return recipeView;
     }
 
@@ -70,7 +81,5 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         Intent intent = new Intent(getContext(), DetailActivity.class);
         getContext().startActivity(intent);
     }
-
-
 
 }
