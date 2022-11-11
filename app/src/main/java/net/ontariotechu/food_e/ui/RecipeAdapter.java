@@ -1,13 +1,8 @@
 package net.ontariotechu.food_e.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +16,9 @@ import androidx.core.content.res.ResourcesCompat;
 
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
+import net.ontariotechu.food_e.Utils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.List;
-import java.util.function.Function;
 
 public class RecipeAdapter extends ArrayAdapter<Recipe> {
 
@@ -57,8 +49,9 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         });
         recipeView.setOnClickListener(this::onItemClicked);
 
+        // Setup components
         txtTitle.setText(currentRecipe.getTitle());
-        loadImage(currentRecipe.getImageUrl(), ivRecipe);
+        Utils.loadImage(currentRecipe.getImageUrl(), ivRecipe);
         return recipeView;
     }
 
@@ -78,21 +71,6 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         getContext().startActivity(intent);
     }
 
-    private void loadImage(String url, ImageView imageView) {
-        Thread thread = new Thread(() -> {
-            try {
-                InputStream inputStream = new URL(url).openStream();
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
-                // Update on ui thread
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    imageView.setImageBitmap(bitmap);
-                });
-            } catch (IOException ex) {
-
-            }
-        });
-        thread.start();
-    }
 
 }

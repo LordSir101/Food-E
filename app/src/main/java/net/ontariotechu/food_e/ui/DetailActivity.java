@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,12 +13,14 @@ import androidx.core.content.res.ResourcesCompat;
 
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
+import net.ontariotechu.food_e.Utils;
 
 public class DetailActivity extends AppCompatActivity {
 
     private TextView txtTitle;
     private ImageButton btnFavourite;
     private ImageButton btnBack;
+    private ImageView ivRecipe;
     private Recipe recipe;
 
     @Override
@@ -34,6 +37,7 @@ public class DetailActivity extends AppCompatActivity {
         txtTitle = findViewById(R.id.txtTitle);
         btnFavourite = findViewById(R.id.btnFavourite);
         btnBack = findViewById(R.id.btnBack);
+        ivRecipe = findViewById(R.id.ivRecipe);
 
         // Add listeners and adapters
         btnFavourite.setOnClickListener(this::onFavouriteClicked);
@@ -41,6 +45,7 @@ public class DetailActivity extends AppCompatActivity {
 
         // Setup view
         txtTitle.setText(recipe.getTitle());
+        Utils.loadImage(recipe.getImageUrl(), ivRecipe);
 
     }
 
