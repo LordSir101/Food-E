@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements BrowseFragment.Da
         MainPageAdapter pageAdapter = new MainPageAdapter(getSupportFragmentManager(), getLifecycle());
         viewPager.setAdapter(pageAdapter);
         new TabLayoutMediator(tabs, viewPager, pageAdapter::getPageName).attach();
-
         // Add listeners and adapters
         btnSettings.setOnClickListener(this::onSettingsClicked);
 
