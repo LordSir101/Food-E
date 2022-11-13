@@ -4,16 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
-
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.RecipeSearcher;
-
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -22,7 +18,6 @@ public class MainActivity extends AppCompatActivity implements BrowseFragment.Da
     private ViewPager2 viewPager;
     private TabLayout tabs;
     private ImageButton btnSettings;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

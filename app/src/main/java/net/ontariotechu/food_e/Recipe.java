@@ -8,6 +8,7 @@ public class Recipe {
     private String title;
     private String imageUrl;
     private boolean isFavourite;
+    private String uri;
 
     public Recipe(String title) {
         this.title = title;
@@ -74,12 +75,16 @@ public class Recipe {
         isFavourite = favourite;
     }
 
+    public void setUri(String sourceUri) { uri = sourceUri; }
+
+    public String getUri() { return uri; }
+
     public static List<Recipe> testRecipes() {
         ArrayList<Recipe> recipes = new ArrayList<>();
         recipes.add(new Recipe("Boiled Milk"));
         recipes.add(new Recipe("Steamed Hams"));
         recipes.add(new Recipe("Green Eggs and Ham"));
-        recipes.add(new Recipe("Ceasar Salad"));
+        recipes.add(new Recipe("Caesar Salad"));
         return recipes;
     }
 }
