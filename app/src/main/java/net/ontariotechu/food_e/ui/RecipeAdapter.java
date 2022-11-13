@@ -20,6 +20,7 @@ import net.ontariotechu.food_e.ImageService;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class RecipeAdapter extends ArrayAdapter<Recipe> {
@@ -51,7 +52,11 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
             currentRecipe.setFavourite(!currentRecipe.getFavourite());
             setFavouriteButton(btnFavourite, currentRecipe.getFavourite());
         });
-        recipeView.setOnClickListener(this::onItemClicked);
+        recipeView.setOnClickListener((View v) -> {
+            Intent intent = new Intent(getContext(), DetailActivity.class);
+            intent.putExtra("recipe", currentRecipe);
+            getContext().startActivity(intent);
+        });
 
         // Setup components
         txtTitle.setText(currentRecipe.getTitle());
@@ -77,9 +82,12 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         }
     }
 
-    private void onItemClicked(View v) {
-        Intent intent = new Intent(getContext(), DetailActivity.class);
-        getContext().startActivity(intent);
-    }
+//    private void onItemClicked(View v) {
+//        Intent intent = new Intent(getContext(), DetailActivity.class);
+//        int pos = v
+//        Recipe clickedRecipe = (Recipe) v;
+//        intent.putExtra("recipe", this);
+//        getContext().startActivity(intent);
+//    }
 
 }

@@ -1,9 +1,10 @@
 package net.ontariotechu.food_e;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recipe {
+public class Recipe  implements Serializable {
 
     private String title;
     private String imageUrl;

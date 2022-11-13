@@ -34,8 +34,9 @@ public class DetailActivity extends AppCompatActivity {
 
         // TODO: Get this recipe from service using id passed by intent possibly
         Intent intent = getIntent();
-        String id = intent.getStringExtra("id");
-        recipe = new Recipe("Steamed Hams");
+        //String id = intent.getStringExtra("id");
+        Recipe currRecipe = (Recipe) intent.getSerializableExtra("recipe");
+        //recipe = new Recipe("Steamed Hams");
 
         // Initialize components
         txtTitle = findViewById(R.id.txtTitle);
@@ -48,9 +49,9 @@ public class DetailActivity extends AppCompatActivity {
         btnBack.setOnClickListener(this::onBackClicked);
 
         // Setup view
-        txtTitle.setText(recipe.getTitle());
+        txtTitle.setText(currRecipe.getTitle());
 
-        imageService.getImageBackground(recipe.getImageUrl(), (bm) -> {
+        imageService.getImageBackground(currRecipe.getImageUrl(), (bm) -> {
             if (bm != null) {
                 runOnUiThread(() -> {
                     ivRecipe.setImageBitmap(bm);
