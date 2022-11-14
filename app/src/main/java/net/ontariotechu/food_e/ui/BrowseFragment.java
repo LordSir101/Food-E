@@ -1,6 +1,7 @@
 package net.ontariotechu.food_e.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -23,6 +25,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 
+import net.ontariotechu.food_e.DataPasser;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
 
@@ -41,13 +44,13 @@ public class BrowseFragment extends Fragment {
     private TextInputEditText etSearch;
     private DataPasser dataPasser;
 
+    private ArrayList<Recipe> recipes;
+    RecipeAdapter recipeAdapter;
+
     private Hashtable<String, ArrayList<String>> selectedFilters;
 
     // Main Activity implements this interface
     // We can call this function to pass data to Main Activity
-    public interface DataPasser {
-        void onDataPass(Hashtable<String, ArrayList<String>> data);
-    }
 
     public static BrowseFragment newInstance() {
         BrowseFragment fragment = new BrowseFragment();
@@ -79,9 +82,10 @@ public class BrowseFragment extends Fragment {
         etSearch = view.findViewById(R.id.etSearch);
 
         // Set listeners and adapters
-        List<Recipe> recipes = Recipe.testRecipes();
-        RecipeAdapter recipeAdapter = new RecipeAdapter(getContext(), recipes);
+        recipes = new ArrayList<>();
+        recipeAdapter = new RecipeAdapter(getContext(), recipes);
         lsRecipes.setAdapter(recipeAdapter);
+
         btnFilters.setOnClickListener(this::onFilterButtonClicked);
         cgMeal.setOnCheckedStateChangeListener(this::onMealChipChanged);
         cgCuisine.setOnCheckedStateChangeListener(this::onCuisineChipChanged);
@@ -92,6 +96,13 @@ public class BrowseFragment extends Fragment {
 
     private void onFilterButtonClicked(View v) {
         llFilters.setVisibility(llFilters.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+
+        recipes = dataPasser.getDisplayedRecipes();
+        if(recipes != null) {
+            recipeAdapter.clear();
+            recipeAdapter.addAll(recipes);
+        }
+
     }
 
     private void onMealChipChanged(ChipGroup group, List<Integer> checkedIds) {
@@ -100,7 +111,7 @@ public class BrowseFragment extends Fragment {
             Chip chip = group.findViewById(id);
             selectedFilters.get("mealType").add(chip.getText().toString());
         }
-        dataPasser.onDataPass(selectedFilters);
+        dataPasser.onFilterChanged(selectedFilters);
     }
 
     private void onCuisineChipChanged(ChipGroup group, List<Integer> checkedIds) {
@@ -109,7 +120,7 @@ public class BrowseFragment extends Fragment {
             Chip chip = group.findViewById(id);
             selectedFilters.get("cuisineType").add(chip.getText().toString());
         }
-        dataPasser.onDataPass(selectedFilters);
+        dataPasser.onFilterChanged(selectedFilters);
     }
 
     private boolean onSearch(View v, int actionId, KeyEvent event) {
@@ -119,4 +130,9 @@ public class BrowseFragment extends Fragment {
         }
         return false;
     }
+
+//    public void updateDisplayedRecipes(ArrayList<Recipe> recipes){
+//
+//
+//    }
 }

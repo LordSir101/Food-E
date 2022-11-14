@@ -10,6 +10,9 @@ import com.google.android.material.tabs.TabLayout;
 
 public class MainPageAdapter extends FragmentStateAdapter {
 
+    BrowseFragment browseFragment;
+    FavouritesFragment favouritesFragment;
+
     public MainPageAdapter(FragmentManager fragmentManager, Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
     }
@@ -17,10 +20,14 @@ public class MainPageAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        if (position == 0)
-            return BrowseFragment.newInstance();
-        else
-            return FavouritesFragment.newInstance();
+        if (position == 0) {
+            this.browseFragment = BrowseFragment.newInstance();
+            return this.browseFragment;
+        }
+        else {
+            this.favouritesFragment = FavouritesFragment.newInstance();
+            return this.favouritesFragment;
+        }
     }
 
     @Override
