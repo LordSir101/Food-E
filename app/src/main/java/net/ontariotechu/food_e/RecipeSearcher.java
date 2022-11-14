@@ -66,7 +66,13 @@ public class RecipeSearcher implements Runnable{
             JSONArray arr = obj.getJSONArray("hits");
             for (int i = 0; i < arr.length(); i++) {
                 String label = arr.getJSONObject(i).getJSONObject("recipe").getString("label");
-                recipeResults.add(new Recipe(label));
+                String imageUrl = arr.getJSONObject(i).getJSONObject("recipe").getString("image");
+                String uri = arr.getJSONObject(i).getJSONObject("recipe").getString("uri");
+
+                Recipe newRecipe = new Recipe(label);
+                newRecipe.setImageUrl(imageUrl);
+                newRecipe.setUri(uri);
+                recipeResults.add(newRecipe);
             }
 
             dataPasser.onRecipesFetched(recipeResults);

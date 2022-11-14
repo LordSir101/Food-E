@@ -83,21 +83,9 @@ public class BrowseFragment extends Fragment {
 
         // Set listeners and adapters
         recipes = new ArrayList<>();
-        //List<Recipe> recipes
         recipeAdapter = new RecipeAdapter(getContext(), recipes);
         lsRecipes.setAdapter(recipeAdapter);
 
-//        lsRecipes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
-//                System.out.println("item clicked");
-//                Intent intent = new Intent(getContext(), DetailActivity.class);
-//                Recipe clickedRecipe = (Recipe) recipeAdapter.recipes.get(pos);
-//                intent.putExtra("recipe", clickedRecipe);
-//                getContext().startActivity(intent);
-//
-//            }
-//        });
         btnFilters.setOnClickListener(this::onFilterButtonClicked);
         cgMeal.setOnCheckedStateChangeListener(this::onMealChipChanged);
         cgCuisine.setOnCheckedStateChangeListener(this::onCuisineChipChanged);
@@ -108,21 +96,13 @@ public class BrowseFragment extends Fragment {
 
     private void onFilterButtonClicked(View v) {
         llFilters.setVisibility(llFilters.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-        System.out.println("update recipes");
 
         recipes = dataPasser.getDisplayedRecipes();
-//        if(recipes != null) {
-//            for (Recipe recipe : recipes) {
-//                if (recipe != null)
-//                    System.out.println(recipe.getTitle());
-//            }
-//        }
         if(recipes != null) {
             recipeAdapter.clear();
             recipeAdapter.addAll(recipes);
         }
 
-        //recipeAdapter.notifyDataSetChanged();
     }
 
     private void onMealChipChanged(ChipGroup group, List<Integer> checkedIds) {

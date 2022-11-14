@@ -57,8 +57,6 @@ public class MainActivity extends AppCompatActivity implements DataPasser {
     public void onRecipesFetched(ArrayList<Recipe> recipes) {
         System.out.println("recipes fetched");
         this.displayedRecipes = recipes;
-        //int fragmentId = pageAdapter.getItemId(0);
-        //pageAdapter.browseFragment.updateDisplayedRecipes(recipes);
     }
 
     @Override
