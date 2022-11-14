@@ -3,9 +3,13 @@ package net.ontariotechu.food_e.ui;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +19,10 @@ import net.ontariotechu.food_e.ImageService;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class DetailActivity extends AppCompatActivity {
 
     private TextView txtTitle;
@@ -22,6 +30,7 @@ public class DetailActivity extends AppCompatActivity {
     private ImageButton btnBack;
     private ImageView ivRecipe;
     private Recipe recipe;
+    private LinearLayout llIngredients;
 
     private ImageService imageService;
 
@@ -32,7 +41,6 @@ public class DetailActivity extends AppCompatActivity {
 
         imageService = ImageService.getInstance();
 
-        // TODO: Get this recipe from service using id passed by intent possibly
         Intent intent = getIntent();
         String id = intent.getStringExtra("id");
         recipe = new Recipe("Steamed Hams");
@@ -42,6 +50,7 @@ public class DetailActivity extends AppCompatActivity {
         btnFavourite = findViewById(R.id.btnFavourite);
         btnBack = findViewById(R.id.btnBack);
         ivRecipe = findViewById(R.id.ivRecipe);
+        llIngredients = findViewById(R.id.llIngredients);
 
         // Add listeners and adapters
         btnFavourite.setOnClickListener(this::onFavouriteClicked);
@@ -49,6 +58,9 @@ public class DetailActivity extends AppCompatActivity {
 
         // Setup view
         txtTitle.setText(recipe.getTitle());
+        // TODO: replace placeholder data with recipe.ingredients
+        List<String> ingredients = Arrays.asList("One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight");
+        loadIngredients(ingredients);
 
         imageService.getImageBackground(recipe.getImageUrl(), (bm) -> {
             if (bm != null) {
@@ -73,6 +85,15 @@ public class DetailActivity extends AppCompatActivity {
 
     private void onBackClicked(View v) {
         finish();
+    }
+
+    private void loadIngredients(List<String> ingredients) {
+        for (String ingredient : ingredients) {
+            View view = LayoutInflater.from(this).inflate(R.layout.fragment_bullet_item, findViewById(androidx.appcompat.R.id.content), false);
+            TextView txtItem = view.findViewById(R.id.txtItem);
+            txtItem.setText(ingredient);
+            llIngredients.addView(view);
+        }
     }
 
 }

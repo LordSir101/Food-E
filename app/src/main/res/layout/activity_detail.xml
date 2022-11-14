@@ -40,12 +40,13 @@
         </RelativeLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/actionBar">
-
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -68,6 +69,7 @@
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
                     style="@style/TextAppearance.Material3.HeadlineMedium"
+                    android:textStyle=""
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:text="Steamed Hams" />
@@ -86,16 +88,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                style="@style/TextAppearance.Material3.TitleLarge"
+                style="@style/TextAppearance.Material3.HeadlineSmall"
                 android:text="Ingredients"/>
-            <TextView
-                android:id="@+id/txtIngredients"
+            <LinearLayout
+                android:id="@+id/llIngredients"
                 android:layout_width="match_parent"
-                android:layout_marginHorizontal="16dp"
                 android:layout_height="wrap_content"
-                android:text=""/>
+                android:layout_marginHorizontal="16dp"
+                android:orientation="vertical" />
         </LinearLayout>
-
     </ScrollView>
+
+
 
 </RelativeLayout>
