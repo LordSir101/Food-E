@@ -19,6 +19,11 @@ import net.ontariotechu.food_e.ImageService;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,10 +64,7 @@ public class DetailActivity extends AppCompatActivity {
 
         // Setup view
         txtTitle.setText(currRecipe.getTitle());
-        //txtTitle.setText(recipe.getTitle());
-        // TODO: replace placeholder data with recipe.ingredients
-        List<String> ingredients = Arrays.asList("One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight");
-        loadIngredients(ingredients);
+        loadIngredients(currRecipe.getIngredients());
 
         imageService.getImageBackground(currRecipe.getImageUrl(), (bm) -> {
             if (bm != null) {
@@ -89,12 +91,20 @@ public class DetailActivity extends AppCompatActivity {
         finish();
     }
 
-    private void loadIngredients(List<String> ingredients) {
-        for (String ingredient : ingredients) {
-            View view = LayoutInflater.from(this).inflate(R.layout.fragment_bullet_item, findViewById(androidx.appcompat.R.id.content), false);
-            TextView txtItem = view.findViewById(R.id.txtItem);
-            txtItem.setText(ingredient);
-            llIngredients.addView(view);
+    private void loadIngredients(String ingredients) {
+
+        try{
+            JSONArray ingredientsJSON = new JSONArray(ingredients);
+
+            for (int i = 0; i < ingredientsJSON.length(); i++) {
+                String text = ingredientsJSON.getJSONObject(i).getString("text");
+                View view = LayoutInflater.from(this).inflate(R.layout.fragment_bullet_item, findViewById(androidx.appcompat.R.id.content), false);
+                TextView txtItem = view.findViewById(R.id.txtItem);
+                txtItem.setText(text);
+                llIngredients.addView(view);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
