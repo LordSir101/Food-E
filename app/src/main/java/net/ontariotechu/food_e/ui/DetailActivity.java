@@ -64,9 +64,6 @@ public class DetailActivity extends AppCompatActivity {
 
         // Setup view
         txtTitle.setText(currRecipe.getTitle());
-        //txtTitle.setText(recipe.getTitle());
-        // TODO: replace placeholder data with recipe.ingredients
-        //List<String> ingredients = Arrays.asList("One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight");
         loadIngredients(currRecipe.getIngredients());
 
         imageService.getImageBackground(currRecipe.getImageUrl(), (bm) -> {
@@ -109,13 +106,6 @@ public class DetailActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-//        for (Object ingredient : ingredients) {
-//            View view = LayoutInflater.from(this).inflate(R.layout.fragment_bullet_item, findViewById(androidx.appcompat.R.id.content), false);
-//            TextView txtItem = view.findViewById(R.id.txtItem);
-//            //txtItem.setText(ingredient);
-//            llIngredients.addView(view);
-//        }
     }
 
 }
