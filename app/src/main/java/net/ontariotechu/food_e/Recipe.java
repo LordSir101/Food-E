@@ -1,5 +1,7 @@
 package net.ontariotechu.food_e;
 
+import org.json.JSONArray;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,7 @@ public class Recipe  implements Serializable {
     private String imageUrl;
     private boolean isFavourite;
     private String uri;
+    private String ingredients;
 
     public Recipe(String title) {
         this.title = title;
@@ -78,6 +81,10 @@ public class Recipe  implements Serializable {
     public void setUri(String sourceUri) { uri = sourceUri; }
 
     public String getUri() { return uri; }
+
+    public void setIngredients(String ingredients) { this.ingredients = ingredients; }
+
+    public String getIngredients() { return ingredients; }
 
     public static List<Recipe> testRecipes() {
         ArrayList<Recipe> recipes = new ArrayList<>();

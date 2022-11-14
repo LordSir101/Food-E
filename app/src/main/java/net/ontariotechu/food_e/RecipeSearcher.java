@@ -68,10 +68,12 @@ public class RecipeSearcher implements Runnable{
                 String label = arr.getJSONObject(i).getJSONObject("recipe").getString("label");
                 String imageUrl = arr.getJSONObject(i).getJSONObject("recipe").getString("image");
                 String uri = arr.getJSONObject(i).getJSONObject("recipe").getString("uri");
+                String ingredients = arr.getJSONObject(i).getJSONObject("recipe").getJSONArray("ingredients").toString();
 
                 Recipe newRecipe = new Recipe(label);
                 newRecipe.setImageUrl(imageUrl);
                 newRecipe.setUri(uri);
+                newRecipe.setIngredients(ingredients);
                 recipeResults.add(newRecipe);
             }
 
