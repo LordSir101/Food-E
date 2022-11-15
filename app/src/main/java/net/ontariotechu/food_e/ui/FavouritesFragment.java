@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -24,9 +25,9 @@ public class FavouritesFragment extends Fragment {
     private List<Recipe> recipes;
     private RecipeAdapter recipeAdapter;
     private RecipeService recipeService;
+    private TextView txtNoFavourites;
 
     private FavouritesFragment() {
-        db = new DbHandler(getContext());
         recipeService = RecipeService.getInstance();
     }
 
@@ -38,27 +39,35 @@ public class FavouritesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        db = new DbHandler(getContext());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favourites, container, false);
 
         // Initialize components
         lsRecipes = view.findViewById(R.id.lsRecipes);
+        txtNoFavourites = view.findViewById(R.id.txtNoFavourites);
 
         // Set Listeners and adapters
-        recipes = Arrays.asList(db.getAllRecipes());
+        Recipe test = Recipe.builder().uri("http://www.edamam.com/ontologies/edamam.owl#recipe_b79327d05b8e5b838ad6cfd9576b30b6").build();
+        recipes = Arrays.asList(test);
         recipeAdapter = new RecipeAdapter(getContext(), recipes);
         lsRecipes.setAdapter(recipeAdapter);
+
+        // Setup components
         fetchRecipeDetails(recipes);
+        txtNoFavourites.setVisibility(recipes.size() == 0 ? View.VISIBLE : View.GONE);
         return view;
     }
 
     private void fetchRecipeDetails(List<Recipe> recipes) {
         for (Recipe recipe : recipes) {
              recipeService.getRecipeByIdBackground(recipe.getUri(), (r) -> {
-                recipe.setTitle(r.getTitle());
-                recipe.setImageUrl(r.getImageUrl());
-                recipe.setIngredients(r.getIngredients());
-                recipeAdapter.notifyDataSetChanged();
+                 getActivity().runOnUiThread(() -> {
+                     recipe.setTitle(r.getTitle());
+                     recipe.setImageUrl(r.getImageUrl());
+                     recipe.setIngredients(r.getIngredients());
+                     recipeAdapter.notifyDataSetChanged();
+                 });
             });
         }
     }

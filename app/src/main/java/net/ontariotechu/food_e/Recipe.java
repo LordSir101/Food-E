@@ -52,7 +52,7 @@ public class Recipe  implements Serializable {
         }
 
         public RecipeBuilder ingredients(String url) {
-            this.imageUrl = url;
+            this.ingredients = url;
             return this;
         }
 

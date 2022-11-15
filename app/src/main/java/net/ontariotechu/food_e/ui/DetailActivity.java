@@ -47,9 +47,7 @@ public class DetailActivity extends AppCompatActivity {
         imageService = ImageService.getInstance();
 
         Intent intent = getIntent();
-        //String id = intent.getStringExtra("id");
         Recipe currRecipe = (Recipe) intent.getSerializableExtra("recipe");
-        //recipe = new Recipe("Steamed Hams");
 
         // Initialize components
         txtTitle = findViewById(R.id.txtTitle);
