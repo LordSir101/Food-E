@@ -65,6 +65,7 @@ public class FavouritesFragment extends Fragment {
                      recipe.setTitle(r.getTitle());
                      recipe.setImageUrl(r.getImageUrl());
                      recipe.setIngredients(r.getIngredients());
+                     recipe.setFavourite(r.getFavourite());
                      recipeAdapter.notifyDataSetChanged();
                  });
             });
