@@ -59,9 +59,11 @@ public class RecipeBridge {
             for (String filter : filters) {
                 query += filter + " AND ";
             }
+
+            query = query.substring(0, query.length() - 5);
         }
 
-        Cursor cursor = db.rawQuery(query.substring(0, query.length() - 5), null);
+        Cursor cursor = db.rawQuery(query, null);
 
         ArrayList<Recipe> recipes = new ArrayList<>();
         while (cursor.moveToNext()) {
