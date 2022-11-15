@@ -29,9 +29,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecipeService recipeService = RecipeService.getInstance();
-        recipeService.getRecipesBackground(null, null, (result) -> {});
-
         // Initialize components
         viewPager = findViewById(R.id.view_pager);
         tabs = findViewById(R.id.tabs);
