@@ -14,6 +14,7 @@ import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
 import net.ontariotechu.food_e.RecipeService;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class FavouritesFragment extends Fragment {
     private ListView lsRecipes;
 
     private DbHandler db;
-    private List<Recipe> recipes;
+    private ArrayList<Recipe> recipes;
     private RecipeAdapter recipeAdapter;
     private RecipeService recipeService;
     private TextView txtNoFavourites;
@@ -47,15 +48,28 @@ public class FavouritesFragment extends Fragment {
         lsRecipes = view.findViewById(R.id.lsRecipes);
         txtNoFavourites = view.findViewById(R.id.txtNoFavourites);
 
-        // Set Listeners and adapters
-        recipes = Arrays.asList(db.getAllRecipes());
+        // Set listeners and adapters
+        recipes = new ArrayList<>();
+        recipes.addAll(Arrays.asList(db.getAllRecipes()));
+        setAllFavourites(recipes, true);
         recipeAdapter = new RecipeAdapter(getContext(), R.layout.fragment_favourites, recipes);
+        fetchRecipeDetails(recipes);
         lsRecipes.setAdapter(recipeAdapter);
 
-        // Setup components
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Update results each time fragment is loaded
+        recipes.clear();
+        recipes.addAll(Arrays.asList(db.getAllRecipes()));
+        setAllFavourites(recipes, true);
+        recipeAdapter.notifyDataSetChanged();
         fetchRecipeDetails(recipes);
         txtNoFavourites.setVisibility(recipes.size() == 0 ? View.VISIBLE : View.GONE);
-        return view;
     }
 
     private void fetchRecipeDetails(List<Recipe> recipes) {
@@ -65,10 +79,15 @@ public class FavouritesFragment extends Fragment {
                      recipe.setTitle(r.getTitle());
                      recipe.setImageUrl(r.getImageUrl());
                      recipe.setIngredients(r.getIngredients());
-                     recipe.setFavourite(r.getFavourite());
                      recipeAdapter.notifyDataSetChanged();
                  });
             });
+        }
+    }
+
+    private void setAllFavourites(List<Recipe> favourites, boolean isFavourite) {
+        for (Recipe r : favourites) {
+            r.setFavourite(isFavourite);
         }
     }
 }
