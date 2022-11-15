@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
+import net.ontariotechu.food_e.DbHandler;
 import net.ontariotechu.food_e.ImageService;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
@@ -26,6 +27,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
 
     List<Recipe> recipes;
     ImageService imageService;
+    DbHandler dbHandler;
 
     public RecipeAdapter(@NonNull Context context, List<Recipe> recipes) {
         super(context, 0, recipes);
@@ -44,11 +46,21 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         // Initialize components
         TextView txtTitle = recipeView.findViewById(R.id.txtTitle);
         ImageButton btnFavourite = recipeView.findViewById(R.id.btnFavourite);
+        dbHandler = new DbHandler(getContext());
+        if (dbHandler.getRecipes(currentRecipe.getUri(), null).length > 0) {
+            setFavouriteButton(btnFavourite, true);
+        }
         ImageView ivRecipe = recipeView.findViewById(R.id.ivRecipe);
 
         // Add listeners and adapters
         btnFavourite.setOnClickListener(v -> {
             currentRecipe.setFavourite(!currentRecipe.getFavourite());
+            dbHandler = new DbHandler(getContext());
+            if (currentRecipe.getFavourite()) {
+                dbHandler.addRecipe(currentRecipe);
+            } else {
+                dbHandler.removeRecipe(currentRecipe.getUri());
+            }
             setFavouriteButton(btnFavourite, currentRecipe.getFavourite());
         });
         recipeView.setOnClickListener((View v) -> {
