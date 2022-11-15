@@ -171,8 +171,6 @@ public class RecipeService {
             e.printStackTrace();
             return null;
         }
-
-
     }
 
     public interface GetRecipesCallback {
