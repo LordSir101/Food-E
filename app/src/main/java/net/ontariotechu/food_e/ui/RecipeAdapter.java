@@ -20,7 +20,6 @@ import net.ontariotechu.food_e.ImageService;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class RecipeAdapter extends ArrayAdapter<Recipe> {

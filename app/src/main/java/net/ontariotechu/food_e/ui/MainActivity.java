@@ -1,7 +1,5 @@
 package net.ontariotechu.food_e.ui;
 
-import static java.security.AccessController.getContext;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,15 +8,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import net.ontariotechu.food_e.DataPasser;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
-import net.ontariotechu.food_e.RecipeSearcher;
 import net.ontariotechu.food_e.RecipeService;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 

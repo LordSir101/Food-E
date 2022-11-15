@@ -17,7 +17,6 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 
-import net.ontariotechu.food_e.DataPasser;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
 import net.ontariotechu.food_e.RecipeService;
@@ -97,13 +96,7 @@ public class BrowseFragment extends Fragment {
             Chip chip = group.findViewById(id);
             selectedFilters.get("mealType").add(chip.getText().toString());
         }
-        recipeService.getRecipesBackground(etSearch.getText().toString(), selectedFilters, (result) -> {
-            getActivity().runOnUiThread(() -> {
-                recipes.clear();
-                recipes.addAll(result);
-                recipeAdapter.notifyDataSetChanged();
-            });
-        });
+        recipeService.getRecipesBackground(etSearch.getText().toString(), selectedFilters, this::onRecipeResult);
     }
 
     private void onCuisineChipChanged(ChipGroup group, List<Integer> checkedIds) {
