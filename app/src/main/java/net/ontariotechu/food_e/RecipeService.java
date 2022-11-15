@@ -6,8 +6,6 @@ import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
-import net.ontariotechu.food_e.ui.MainActivity;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class RecipeService extends Application {
+public class RecipeService {
 
     private static RecipeService instance;
     private final String baseUrl;
@@ -35,12 +33,6 @@ public class RecipeService extends Application {
     private RecipeService() {
         this.baseUrl = "https://api.edamam.com/api/recipes/v2";
         this.requiredParams = String.format("?type=public&app_id=%s&app_key=%s", BuildConfig.APP_ID, BuildConfig.API_KEY);
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        //RecipeService.context = getApplicationContext();
     }
 
     // Thread safe instantiation
