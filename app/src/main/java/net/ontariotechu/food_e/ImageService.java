@@ -56,6 +56,8 @@ public class ImageService {
      * @param url The image URL
      */
     public Bitmap getImage(String url) throws IOException {
+        if (url == null)
+            return null;
         if (cached.get(url) == null) {
             InputStream inputStream = new URL(url).openStream();
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);

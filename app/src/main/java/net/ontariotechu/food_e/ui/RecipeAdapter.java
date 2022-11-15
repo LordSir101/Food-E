@@ -20,7 +20,6 @@ import net.ontariotechu.food_e.ImageService;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class RecipeAdapter extends ArrayAdapter<Recipe> {
@@ -81,13 +80,5 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
             button.setBackground(starSolid);
         }
     }
-
-//    private void onItemClicked(View v) {
-//        Intent intent = new Intent(getContext(), DetailActivity.class);
-//        int pos = v
-//        Recipe clickedRecipe = (Recipe) v;
-//        intent.putExtra("recipe", this);
-//        getContext().startActivity(intent);
-//    }
 
 }
