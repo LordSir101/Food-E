@@ -44,7 +44,7 @@ public class RecipeBridge {
         ArrayList<String> filters = new ArrayList<>();
 
         if (recipeId != null && !recipeId.isEmpty()) {
-            filters.add(DbHandler.SAVED_RECIPE_URI_COL + " LIKE %" + recipeId);
+            filters.add(DbHandler.SAVED_RECIPE_URI_COL + " LIKE '%" + recipeId + "'");
         }
 
         if (title != null && !title.isEmpty()) {
@@ -95,7 +95,7 @@ public class RecipeBridge {
             throw new IllegalArgumentException("Tried to delete all rows from the database");
         }
         SQLiteDatabase db = dbHandler.getWritableDatabase();
-        db.delete(DbHandler.RECIPE, DbHandler.SAVED_RECIPE_URI_COL + " LIKE %?", new String[] { uri });
+        db.delete(DbHandler.RECIPE, DbHandler.SAVED_RECIPE_URI_COL + " LIKE '%" + uri + "%'", null);
         db.close();
     }
 }
