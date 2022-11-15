@@ -40,6 +40,8 @@ public class BrowseFragment extends Fragment {
 
     private Hashtable<String, ArrayList<String>> selectedFilters;
 
+    private Context context;
+
     public BrowseFragment() {
         recipeService = RecipeService.getInstance();
     }
@@ -51,7 +53,9 @@ public class BrowseFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
+
         super.onAttach(context);
+        this.context = context;
     }
 
     @Override
@@ -75,7 +79,7 @@ public class BrowseFragment extends Fragment {
         // Set listeners and adapters
         recipes = new ArrayList<>();
         recipeAdapter = new RecipeAdapter(getContext(), recipes);
-        recipeService.getRecipesBackground(null, selectedFilters, this::onRecipeResult);
+        recipeService.getRecipesBackground(context, null, selectedFilters, this::onRecipeResult);
         lsRecipes.setAdapter(recipeAdapter);
 
         btnFilters.setOnClickListener(this::onFilterButtonClicked);
@@ -96,7 +100,7 @@ public class BrowseFragment extends Fragment {
             Chip chip = group.findViewById(id);
             selectedFilters.get("mealType").add(chip.getText().toString());
         }
-        recipeService.getRecipesBackground(etSearch.getText().toString(), selectedFilters, this::onRecipeResult);
+        recipeService.getRecipesBackground(context, etSearch.getText().toString(), selectedFilters, this::onRecipeResult);
     }
 
     private void onCuisineChipChanged(ChipGroup group, List<Integer> checkedIds) {
@@ -105,12 +109,12 @@ public class BrowseFragment extends Fragment {
             Chip chip = group.findViewById(id);
             selectedFilters.get("cuisineType").add(chip.getText().toString());
         }
-        recipeService.getRecipesBackground(etSearch.getText().toString(), selectedFilters, this::onRecipeResult);
+        recipeService.getRecipesBackground(context, etSearch.getText().toString(), selectedFilters, this::onRecipeResult);
     }
 
     private boolean onSearch(View v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-            recipeService.getRecipesBackground(etSearch.getText().toString(), selectedFilters, this::onRecipeResult);
+            recipeService.getRecipesBackground(context, etSearch.getText().toString(), selectedFilters, this::onRecipeResult);
             return true;
         }
         return false;

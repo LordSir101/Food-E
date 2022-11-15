@@ -26,7 +26,7 @@ import java.util.Scanner;
 public class RecipeService extends Application {
 
     private static RecipeService instance;
-    private static Context context;
+    //private static Context context;
     private final String baseUrl;
 
     private DbHandler db;
@@ -40,7 +40,7 @@ public class RecipeService extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        RecipeService.context = getApplicationContext();
+        //RecipeService.context = getApplicationContext();
     }
 
     // Thread safe instantiation
@@ -57,14 +57,14 @@ public class RecipeService extends Application {
         return result;
     }
 
-    public void getRecipesBackground(@Nullable String search, @Nullable Hashtable<String, ArrayList<String>> filters, RecipeResultCallback callback) {
+    public void getRecipesBackground(Context context, @Nullable String search, @Nullable Hashtable<String, ArrayList<String>> filters, RecipeResultCallback callback) {
         Thread thread = new Thread(() -> {
-           callback.onComplete(getRecipes(search, filters));
+           callback.onComplete(getRecipes(context, search, filters));
         });
         thread.start();
     }
 
-    private List<Recipe> getRecipes(@Nullable String search, @Nullable Hashtable<String, ArrayList<String>> filters) {
+    private List<Recipe> getRecipes(Context context, @Nullable String search, @Nullable Hashtable<String, ArrayList<String>> filters) {
 
         StringBuilder url = new StringBuilder(baseUrl);
 
