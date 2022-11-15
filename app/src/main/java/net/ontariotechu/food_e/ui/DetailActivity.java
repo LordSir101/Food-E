@@ -1,6 +1,7 @@
 package net.ontariotechu.food_e.ui;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import net.ontariotechu.food_e.DbHandler;
 import net.ontariotechu.food_e.ImageService;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
@@ -39,15 +41,18 @@ public class DetailActivity extends AppCompatActivity {
 
     private ImageService imageService;
 
+    private DbHandler db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
         imageService = ImageService.getInstance();
+        db = new DbHandler(getApplicationContext());
 
         Intent intent = getIntent();
-        Recipe currRecipe = (Recipe) intent.getSerializableExtra("recipe");
+        recipe = (Recipe) intent.getSerializableExtra("recipe");
 
         // Initialize components
         txtTitle = findViewById(R.id.txtTitle);
@@ -61,10 +66,11 @@ public class DetailActivity extends AppCompatActivity {
         btnBack.setOnClickListener(this::onBackClicked);
 
         // Setup view
-        txtTitle.setText(currRecipe.getTitle());
-        loadIngredients(currRecipe.getIngredients());
+        txtTitle.setText(recipe.getTitle());
+        loadIngredients(recipe.getIngredients());
+        setFavouriteButton(btnFavourite, recipe.getFavourite());
 
-        imageService.getImageBackground(currRecipe.getImageUrl(), (bm) -> {
+        imageService.getImageBackground(recipe.getImageUrl(), (bm) -> {
             if (bm != null) {
                 runOnUiThread(() -> {
                     ivRecipe.setImageBitmap(bm);
@@ -76,12 +82,22 @@ public class DetailActivity extends AppCompatActivity {
 
     private void onFavouriteClicked(View v) {
         recipe.setFavourite(!recipe.getFavourite());
+        setFavouriteButton((ImageButton) v, recipe.getFavourite());
         if (!recipe.getFavourite()) {
+            db.removeRecipe(recipe.getUri());
+        } else {
+            db.addRecipe(recipe);
+        }
+    }
+
+    // Changes the star from outline to solid or solid to outline
+    private void setFavouriteButton(ImageButton button, boolean isFavourite) {
+        if (!isFavourite) {
             Drawable starOutline = ResourcesCompat.getDrawable(getResources(), R.drawable.star_outline, null);
-            btnFavourite.setBackground(starOutline);
+            button.setBackground(starOutline);
         } else {
             Drawable starSolid = ResourcesCompat.getDrawable(getResources(), R.drawable.star_solid, null);
-            btnFavourite.setBackground(starSolid);
+            button.setBackground(starSolid);
         }
     }
 

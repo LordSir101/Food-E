@@ -17,11 +17,13 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 
+import net.ontariotechu.food_e.DbHandler;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
 import net.ontariotechu.food_e.RecipeService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -39,6 +41,8 @@ public class BrowseFragment extends Fragment {
     private RecipeService recipeService;
 
     private Hashtable<String, ArrayList<String>> selectedFilters;
+
+    private DbHandler db;
 
     private Context context;
 
@@ -62,6 +66,7 @@ public class BrowseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        db = new DbHandler(getContext());
         //keep track of current filters
         selectedFilters = new Hashtable<>();
 
@@ -88,6 +93,25 @@ public class BrowseFragment extends Fragment {
         etSearch.setOnEditorActionListener(this::onSearch);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Update star icon
+        ArrayList<Recipe> dbRecipes = new ArrayList<>(Arrays.asList(db.getAllRecipes()));
+        for (Recipe recipe : recipes) {
+            boolean isFavourite = false;
+            for (Recipe dbRecipe : dbRecipes) {
+                if (dbRecipe.getUri().equals(recipe.getUri())) {
+                    isFavourite = true;
+                    break;
+                }
+            }
+            recipe.setFavourite(isFavourite);
+        }
+        recipeAdapter.notifyDataSetChanged();
+
     }
 
     private void onFilterButtonClicked(View v) {
