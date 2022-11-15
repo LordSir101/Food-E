@@ -14,12 +14,13 @@ import net.ontariotechu.food_e.DataPasser;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
 import net.ontariotechu.food_e.RecipeSearcher;
+import net.ontariotechu.food_e.RecipeService;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements DataPasser {
+public class MainActivity extends AppCompatActivity {
 
     private ViewPager2 viewPager;
     private TabLayout tabs;
@@ -33,6 +34,9 @@ public class MainActivity extends AppCompatActivity implements DataPasser {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        RecipeService recipeService = RecipeService.getInstance();
+        recipeService.getRecipesBackground(null, null, (result) -> {});
 
         // Initialize components
         viewPager = findViewById(R.id.view_pager);
@@ -53,22 +57,4 @@ public class MainActivity extends AppCompatActivity implements DataPasser {
         startActivity(intent);
     }
 
-    @Override
-    public void onRecipesFetched(ArrayList<Recipe> recipes) {
-        System.out.println("recipes fetched");
-        this.displayedRecipes = recipes;
-    }
-
-    @Override
-    public void onFilterChanged(Hashtable<String, ArrayList<String>> data) {
-        // Make the API call from RecipeSearcher
-        Runnable recipeSearcher = new RecipeSearcher(this, data);
-        Thread thread = new Thread(recipeSearcher);
-        thread.start();
-    }
-
-    @Override
-    public ArrayList<Recipe> getDisplayedRecipes() {
-        return this.displayedRecipes;
-    }
 }

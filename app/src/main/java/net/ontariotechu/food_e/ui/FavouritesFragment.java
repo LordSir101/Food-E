@@ -8,6 +8,7 @@ import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
+import net.ontariotechu.food_e.DbHandler;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
 
@@ -16,6 +17,14 @@ import java.util.List;
 public class FavouritesFragment extends Fragment {
 
     private ListView lsRecipes;
+
+    private DbHandler db;
+    private List<Recipe> recipes;
+    private RecipeAdapter recipeAdapter;
+
+    private FavouritesFragment() {
+        db = new DbHandler(getContext());
+    }
 
     public static FavouritesFragment newInstance() {
         FavouritesFragment fragment = new FavouritesFragment();
@@ -32,8 +41,9 @@ public class FavouritesFragment extends Fragment {
         lsRecipes = view.findViewById(R.id.lsRecipes);
 
         // Set Listeners and adapters
-        List<Recipe> recipes = Recipe.testRecipes();
-        RecipeAdapter recipeAdapter = new RecipeAdapter(getContext(), recipes);
+        recipes = Recipe.testRecipes();
+        // TODO: fetch recipe info from api
+        recipeAdapter = new RecipeAdapter(getContext(), recipes);
         lsRecipes.setAdapter(recipeAdapter);
 
         return view;

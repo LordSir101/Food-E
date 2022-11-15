@@ -1,24 +1,16 @@
 package net.ontariotechu.food_e.ui;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.chip.Chip;
@@ -28,11 +20,11 @@ import com.google.android.material.textfield.TextInputEditText;
 import net.ontariotechu.food_e.DataPasser;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
+import net.ontariotechu.food_e.RecipeService;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class BrowseFragment extends Fragment {
 
@@ -42,15 +34,16 @@ public class BrowseFragment extends Fragment {
     private ChipGroup cgMeal;
     private ChipGroup cgCuisine;
     private TextInputEditText etSearch;
-    private DataPasser dataPasser;
 
-    private ArrayList<Recipe> recipes;
-    RecipeAdapter recipeAdapter;
+    private List<Recipe> recipes;
+    private RecipeAdapter recipeAdapter;
+    private RecipeService recipeService;
 
     private Hashtable<String, ArrayList<String>> selectedFilters;
 
-    // Main Activity implements this interface
-    // We can call this function to pass data to Main Activity
+    public BrowseFragment() {
+        recipeService = RecipeService.getInstance();
+    }
 
     public static BrowseFragment newInstance() {
         BrowseFragment fragment = new BrowseFragment();
@@ -60,7 +53,6 @@ public class BrowseFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        dataPasser = (DataPasser) context;
     }
 
     @Override
@@ -84,6 +76,7 @@ public class BrowseFragment extends Fragment {
         // Set listeners and adapters
         recipes = new ArrayList<>();
         recipeAdapter = new RecipeAdapter(getContext(), recipes);
+        recipeService.getRecipesBackground(null, selectedFilters, this::onRecipeResult);
         lsRecipes.setAdapter(recipeAdapter);
 
         btnFilters.setOnClickListener(this::onFilterButtonClicked);
@@ -96,13 +89,6 @@ public class BrowseFragment extends Fragment {
 
     private void onFilterButtonClicked(View v) {
         llFilters.setVisibility(llFilters.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-
-        recipes = dataPasser.getDisplayedRecipes();
-        if(recipes != null) {
-            recipeAdapter.clear();
-            recipeAdapter.addAll(recipes);
-        }
-
     }
 
     private void onMealChipChanged(ChipGroup group, List<Integer> checkedIds) {
@@ -111,7 +97,13 @@ public class BrowseFragment extends Fragment {
             Chip chip = group.findViewById(id);
             selectedFilters.get("mealType").add(chip.getText().toString());
         }
-        dataPasser.onFilterChanged(selectedFilters);
+        recipeService.getRecipesBackground(etSearch.getText().toString(), selectedFilters, (result) -> {
+            getActivity().runOnUiThread(() -> {
+                recipes.clear();
+                recipes.addAll(result);
+                recipeAdapter.notifyDataSetChanged();
+            });
+        });
     }
 
     private void onCuisineChipChanged(ChipGroup group, List<Integer> checkedIds) {
@@ -120,19 +112,23 @@ public class BrowseFragment extends Fragment {
             Chip chip = group.findViewById(id);
             selectedFilters.get("cuisineType").add(chip.getText().toString());
         }
-        dataPasser.onFilterChanged(selectedFilters);
+        recipeService.getRecipesBackground(etSearch.getText().toString(), selectedFilters, this::onRecipeResult);
     }
 
     private boolean onSearch(View v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-            // TODO: Handle search
+            recipeService.getRecipesBackground(etSearch.getText().toString(), selectedFilters, this::onRecipeResult);
             return true;
         }
         return false;
     }
 
-//    public void updateDisplayedRecipes(ArrayList<Recipe> recipes){
-//
-//
-//    }
+    private void onRecipeResult(List<Recipe> result) {
+        getActivity().runOnUiThread(() -> {
+            recipes.clear();
+            recipeAdapter.clear();
+            recipes.addAll(result);
+            recipeAdapter.notifyDataSetChanged();
+        });
+    }
 }

@@ -82,12 +82,4 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         }
     }
 
-//    private void onItemClicked(View v) {
-//        Intent intent = new Intent(getContext(), DetailActivity.class);
-//        int pos = v
-//        Recipe clickedRecipe = (Recipe) v;
-//        intent.putExtra("recipe", this);
-//        getContext().startActivity(intent);
-//    }
-
 }
