@@ -23,10 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class RecipeService extends Application {
+public class RecipeService {
 
     private static RecipeService instance;
-    //private static Context context;
     private final String baseUrl;
 
     private DbHandler db;
@@ -37,11 +36,6 @@ public class RecipeService extends Application {
         this.baseUrl = String.format("https://api.edamam.com/api/recipes/v2?type=public&app_id=%s&app_key=%s", BuildConfig.APP_ID, BuildConfig.API_KEY);
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        //RecipeService.context = getApplicationContext();
-    }
 
     // Thread safe instantiation
     public static RecipeService getInstance() {
