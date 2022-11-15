@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         // Initialize components
         viewPager = findViewById(R.id.view_pager);
         tabs = findViewById(R.id.tabs);
@@ -40,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         new TabLayoutMediator(tabs, viewPager, pageAdapter::getPageName).attach();
         // Add listeners and adapters
         btnSettings.setOnClickListener(this::onSettingsClicked);
-
     }
 
     public void onSettingsClicked(View v) {

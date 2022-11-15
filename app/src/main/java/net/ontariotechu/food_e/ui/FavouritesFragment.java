@@ -49,7 +49,7 @@ public class FavouritesFragment extends Fragment {
 
         // Set Listeners and adapters
         recipes = Arrays.asList(db.getAllRecipes());
-        recipeAdapter = new RecipeAdapter(getContext(), recipes);
+        recipeAdapter = new RecipeAdapter(getContext(), R.layout.fragment_favourites, recipes);
         lsRecipes.setAdapter(recipeAdapter);
 
         // Setup components

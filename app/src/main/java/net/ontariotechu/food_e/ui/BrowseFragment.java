@@ -78,7 +78,7 @@ public class BrowseFragment extends Fragment {
 
         // Set listeners and adapters
         recipes = new ArrayList<>();
-        recipeAdapter = new RecipeAdapter(getContext(), recipes);
+        recipeAdapter = new RecipeAdapter(getContext(), R.layout.fragment_browse, recipes);
         recipeService.getRecipesBackground(context, null, selectedFilters, this::onRecipeResult);
         lsRecipes.setAdapter(recipeAdapter);
 

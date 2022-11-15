@@ -29,8 +29,8 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
     ImageService imageService;
     DbHandler dbHandler;
 
-    public RecipeAdapter(@NonNull Context context, List<Recipe> recipes) {
-        super(context, 0, recipes);
+    public RecipeAdapter(@NonNull Context context, int resource, List<Recipe> recipes) {
+        super(context, resource, recipes);
         this.recipes = recipes;
         this.imageService = ImageService.getInstance();
     }
@@ -38,18 +38,16 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
     @Override
     public View getView(int pos, View view, ViewGroup parent) {
         View recipeView = view;
-        if (recipeView == null)
+        if (recipeView == null) {
             recipeView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_recipe, parent, false);
+        }
 
         Recipe currentRecipe = recipes.get(pos);
 
         // Initialize components
         TextView txtTitle = recipeView.findViewById(R.id.txtTitle);
         ImageButton btnFavourite = recipeView.findViewById(R.id.btnFavourite);
-        dbHandler = new DbHandler(getContext());
-        if (dbHandler.getRecipes(currentRecipe.getUri(), null).length > 0) {
-            setFavouriteButton(btnFavourite, true);
-        }
+        setFavouriteButton(btnFavourite, currentRecipe.getFavourite());
         ImageView ivRecipe = recipeView.findViewById(R.id.ivRecipe);
 
         // Add listeners and adapters
@@ -93,4 +91,8 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         }
     }
 
+    @Override
+    public int getCount() {
+        return recipes != null ? recipes.size() : 0;
+    }
 }
