@@ -75,8 +75,8 @@ public class BrowseFragment extends Fragment {
         // Set listeners and adapters
         recipes = new ArrayList<>();
         recipeAdapter = new RecipeAdapter(getContext(), recipes);
-        recipeService.getRecipesBackground(null, selectedFilters, this::onRecipeResult);
         lsRecipes.setAdapter(recipeAdapter);
+        recipeService.getRecipesBackground(null, selectedFilters, this::onRecipeResult);
 
         btnFilters.setOnClickListener(this::onFilterButtonClicked);
         cgMeal.setOnCheckedStateChangeListener(this::onMealChipChanged);

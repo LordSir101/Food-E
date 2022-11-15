@@ -11,7 +11,9 @@ import androidx.fragment.app.Fragment;
 import net.ontariotechu.food_e.DbHandler;
 import net.ontariotechu.food_e.R;
 import net.ontariotechu.food_e.Recipe;
+import net.ontariotechu.food_e.RecipeService;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class FavouritesFragment extends Fragment {
@@ -21,9 +23,11 @@ public class FavouritesFragment extends Fragment {
     private DbHandler db;
     private List<Recipe> recipes;
     private RecipeAdapter recipeAdapter;
+    private RecipeService recipeService;
 
     private FavouritesFragment() {
         db = new DbHandler(getContext());
+        recipeService = RecipeService.getInstance();
     }
 
     public static FavouritesFragment newInstance() {
@@ -41,11 +45,21 @@ public class FavouritesFragment extends Fragment {
         lsRecipes = view.findViewById(R.id.lsRecipes);
 
         // Set Listeners and adapters
-        recipes = Recipe.testRecipes();
-        // TODO: fetch recipe info from api
+        recipes = Arrays.asList(db.getAllRecipes());
         recipeAdapter = new RecipeAdapter(getContext(), recipes);
         lsRecipes.setAdapter(recipeAdapter);
-
+        fetchRecipeDetails(recipes);
         return view;
+    }
+
+    private void fetchRecipeDetails(List<Recipe> recipes) {
+        for (Recipe recipe : recipes) {
+             recipeService.getRecipeByIdBackground(recipe.getUri(), (r) -> {
+                recipe.setTitle(r.getTitle());
+                recipe.setImageUrl(r.getImageUrl());
+                recipe.setIngredients(r.getIngredients());
+                recipeAdapter.notifyDataSetChanged();
+            });
+        }
     }
 }

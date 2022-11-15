@@ -20,7 +20,7 @@ public class Recipe  implements Serializable {
     public Recipe() {
     }
 
-    public RecipeBuilder builder() {
+    public static RecipeBuilder builder() {
         return new RecipeBuilder();
     }
 
@@ -28,6 +28,8 @@ public class Recipe  implements Serializable {
         private String title;
         private String imageUrl;
         private boolean isFavourite;
+        private String uri;
+        private String ingredients;
 
         public RecipeBuilder title(String title) {
             this.title = title;
@@ -44,11 +46,23 @@ public class Recipe  implements Serializable {
             return this;
         }
 
+        public RecipeBuilder uri(String uri) {
+            this.uri = uri;
+            return this;
+        }
+
+        public RecipeBuilder ingredients(String url) {
+            this.imageUrl = url;
+            return this;
+        }
+
         public Recipe build() {
             Recipe result = new Recipe();
             result.title = title;
             result.imageUrl = imageUrl;
             result.isFavourite = isFavourite;
+            result.uri = uri;
+            result.ingredients = ingredients;
             return result;
         }
 
