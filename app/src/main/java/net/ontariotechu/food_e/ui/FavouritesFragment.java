@@ -48,8 +48,7 @@ public class FavouritesFragment extends Fragment {
         txtNoFavourites = view.findViewById(R.id.txtNoFavourites);
 
         // Set Listeners and adapters
-        Recipe test = Recipe.builder().uri("http://www.edamam.com/ontologies/edamam.owl#recipe_b79327d05b8e5b838ad6cfd9576b30b6").build();
-        recipes = Arrays.asList(test);
+        recipes = Arrays.asList(db.getAllRecipes());
         recipeAdapter = new RecipeAdapter(getContext(), recipes);
         lsRecipes.setAdapter(recipeAdapter);
 
