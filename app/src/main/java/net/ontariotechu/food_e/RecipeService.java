@@ -25,15 +25,15 @@ public class RecipeService {
     private static RecipeService instance;
     private final String baseUrl;
     private DbHandler dbHandler;
-
+    private final String requiredParams;
     private DbHandler db;
     private List<String> allergies;
     private List<String> diets;
 
-    public RecipeService() {
-        this.baseUrl = String.format("https://api.edamam.com/api/recipes/v2?type=public&app_id=%s&app_key=%s", BuildConfig.APP_ID, BuildConfig.API_KEY);
+    private RecipeService() {
+        this.baseUrl = "https://api.edamam.com/api/recipes/v2";
+        this.requiredParams = String.format("?type=public&app_id=%s&app_key=%s", BuildConfig.APP_ID, BuildConfig.API_KEY);
     }
-
 
     // Thread safe instantiation
     public static RecipeService getInstance() {
@@ -49,7 +49,7 @@ public class RecipeService {
         return result;
     }
 
-    public void getRecipesBackground(Context context, @Nullable String search, @Nullable Hashtable<String, ArrayList<String>> filters, RecipeResultCallback callback) {
+    public void getRecipesBackground(Context context, @Nullable String search, @Nullable Hashtable<String, ArrayList<String>> filters, GetRecipesCallback callback) {
         Thread thread = new Thread(() -> {
            callback.onComplete(getRecipes(context, search, filters));
         });
@@ -58,7 +58,7 @@ public class RecipeService {
 
     private List<Recipe> getRecipes(Context context, @Nullable String search, @Nullable Hashtable<String, ArrayList<String>> filters) {
 
-        StringBuilder url = new StringBuilder(baseUrl);
+        StringBuilder url = new StringBuilder(baseUrl).append(requiredParams);
 
         db = new DbHandler(context);
         allergies = Arrays.asList(db.getAllergies());
@@ -134,7 +134,52 @@ public class RecipeService {
         }
     }
 
-    public interface RecipeResultCallback {
+    public void getRecipeByIdBackground(String recipeUri, GetRecipeByIdCallback callback) {
+        Thread thread = new Thread(() -> {
+            callback.onComplete(getRecipeById(recipeUri));
+        });
+        thread.start();
+    }
+
+    private Recipe getRecipeById(String recipeUri) {
+        if (TextUtils.isEmpty(recipeUri))
+            return null;
+        String id = recipeUri.split("#recipe_")[1];
+        String url = new StringBuilder(baseUrl).append('/').append(id).append(requiredParams).toString();
+
+        try {
+            URLConnection connection = new URL(url.toString()).openConnection();
+            connection.setRequestProperty("Accept", "application/json");
+            InputStream is = connection.getInputStream();
+            Scanner s = new Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            JSONObject obj = new JSONObject(result);
+
+            String name = obj.getJSONObject("recipe").getString("label");
+            String imageUrl = obj.getJSONObject("recipe").getString("image");
+            String uri = obj.getJSONObject("recipe").getString("uri");
+            String ingredients = obj.getJSONObject("recipe").getString("ingredients");
+
+            return Recipe.builder()
+                    .title(name)
+                    .imageUrl(imageUrl)
+                    .ingredients(ingredients)
+                    .uri(uri)
+                    .build();
+
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+    }
+
+    public interface GetRecipesCallback {
         void onComplete(List<Recipe> recipes);
+    }
+
+    public interface GetRecipeByIdCallback {
+        void onComplete(Recipe recipe);
     }
 }

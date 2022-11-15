@@ -7,6 +7,18 @@
     android:animateLayoutChanges="true"
     tools:context=".ui.FavouritesFragment">
 
+    <TextView
+        android:id="@+id/txtNoFavourites"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:textAlignment="center"
+        android:textStyle="italic"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:text="You have not added any favourites yet" />
+
     <ListView
         android:id="@+id/lsRecipes"
         android:layout_width="match_parent"
