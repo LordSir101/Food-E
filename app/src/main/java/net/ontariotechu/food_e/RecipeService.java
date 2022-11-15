@@ -1,12 +1,9 @@
 package net.ontariotechu.food_e;
 
-import android.app.Application;
 import android.content.Context;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
-
-import net.ontariotechu.food_e.ui.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +24,7 @@ public class RecipeService {
 
     private static RecipeService instance;
     private final String baseUrl;
+    private DbHandler dbHandler;
 
     private DbHandler db;
     private List<String> allergies;
@@ -117,6 +115,17 @@ public class RecipeService {
                 recipeResults.add(newRecipe);
             }
 
+            dbHandler = new DbHandler(context);
+            Recipe[] recipes = dbHandler.getAllRecipes();
+
+            for (Recipe rr : recipeResults) {
+                for (Recipe r : recipes) {
+                    if (r.getUri().equals(rr.getUri())) {
+                        rr.setFavourite(true);
+                    }
+                }
+            }
+
             return recipeResults;
 
         } catch (IOException | JSONException e) {
@@ -128,5 +137,4 @@ public class RecipeService {
     public interface RecipeResultCallback {
         void onComplete(List<Recipe> recipes);
     }
-
 }

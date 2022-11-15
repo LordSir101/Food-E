@@ -43,7 +43,7 @@ public class FavouritesFragment extends Fragment {
         // Set Listeners and adapters
         recipes = Recipe.testRecipes();
         // TODO: fetch recipe info from api
-        recipeAdapter = new RecipeAdapter(getContext(), recipes);
+        recipeAdapter = new RecipeAdapter(getContext(), R.layout.fragment_favourites, recipes);
         lsRecipes.setAdapter(recipeAdapter);
 
         return view;
