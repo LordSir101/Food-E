@@ -103,8 +103,17 @@ public class DbHandler extends SQLiteOpenHelper {
      * @param diets Diets to remove
      */
     public void removeDiets(String[] diets) {
+        if (diets.length == 0)
+            return;
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(DIET, DIET + " = ?", diets);
+        String query = DIET + " IN " + "(";
+        for (String diet : diets) {
+            query += " '" + diet + "', ";
+        }
+
+        query = query.substring(0, query.length() - 2);
+        query += ")";
+        db.delete(DIET, query, null);
         db.close();
     }
 
@@ -145,8 +154,17 @@ public class DbHandler extends SQLiteOpenHelper {
      * @param allergies Allergies to remove
      */
     public void removeAllergies(String[] allergies) {
+        if (allergies.length == 0)
+            return;
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(ALLERGY, ALLERGY + " = ?", allergies);
+        String query = ALLERGY + " IN " + "(";
+        for (String allergy : allergies) {
+            query += " '" + allergy + "', ";
+        }
+
+        query = query.substring(0, query.length() - 2);
+        query += ")";
+        db.delete(ALLERGY, query, null);
         db.close();
     }
 
