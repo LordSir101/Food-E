@@ -47,6 +47,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         // Initialize components
         TextView txtTitle = recipeView.findViewById(R.id.txtTitle);
         ImageButton btnFavourite = recipeView.findViewById(R.id.btnFavourite);
+        setFavouriteButton(btnFavourite, currentRecipe.getFavourite());
         ImageView ivRecipe = recipeView.findViewById(R.id.ivRecipe);
 
         // Add listeners and adapters
